@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author : zhouwenyu
@@ -42,7 +43,6 @@ public class FileCreate {
             //创建文件夹
             file.mkdir();
         }
-
         //创建dao层
         File dao = new File(file.getAbsoluteFile()+"/"+nameChange(tableName,true)+"Dao.java");
         if(!dao.exists()){
@@ -66,7 +66,7 @@ public class FileCreate {
         }
 
         //mapper.xml文件生成
-        File mapperPage = new File(System.getProperty("user.dir")+"/src/main/resources/"+FileCreate.mapper);
+        File mapperPage = new File(System.getProperty("user.dir") + mapperLocation);
         if (!mapperPage.exists()) {
             //创建文件夹
             mapperPage.mkdir();
@@ -77,23 +77,26 @@ public class FileCreate {
             return true;
         }
         List<String> pojoName = Database.getColumnNames(database,tableName);
+        String pojoPath = "\""+parentPage + "." + FileCreate.pojo + "." + nameChange(tableName,true)+"\"";
         StringBuilder code = new StringBuilder
                 ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">"
                 +"\n<mapper namespace=\"");
-        code.append(parentPage).append(".").append(FileCreate.dao).append(".").append(nameChange(tableName,true)).append("Dao\"\n >")
-                .append("<resultMap id=\"BaseResultMap\" type=\"").append(parentPage).append(".").append(FileCreate.pojo)
+        code.append(parentPage).append(".").append(FileCreate.dao).append(".").append(nameChange(tableName,true)).append("Dao\">\n ")
+                .append("    <resultMap id=\"BaseResultMap\" type=\"").append(parentPage).append(".").append(FileCreate.pojo)
                 .append(".").append(nameChange(tableName,true)).append("\" >");
 
         StringBuilder sql = new StringBuilder("\n<sql id=\"Base_Column_List\" >\n");
 
         StringBuilder sqlWhere = new StringBuilder("\n<sql id=\"Example_Where_Clause\"><trim prefix=\"where\" prefixOverrides=\"and|or\">  ");
-
-        StringBuilder insert = new StringBuilder("\n<insert id=\"insert\" parameterType=\"");
-        StringBuilder insertEnd = new StringBuilder(")values(");
-        insert.append(parentPage).append(".").append(FileCreate.pojo).append(".").append(nameChange(tableName,true))
-                .append("\"  useGeneratedKeys=\"true\" keyProperty=\"").append(nameChange(pojoName.get(0),false)).append("\" >")
-                .append("\ninsert into ").append(tableName).append("(");
+        StringBuilder insertEnd = new StringBuilder(")\n    values(");
+        //增
+        StringBuilder insert = new StringBuilder("\n<insert id=\"insert\" parameterType=").append(pojoPath).append(
+                "  useGeneratedKeys=\"true\" keyProperty=\"").append(nameChange(pojoName.get(0),false))
+                .append("\" >").append("\n    insert into ").append(tableName).append("(");
+        //改
+        StringBuilder update = new StringBuilder("\n<update id=\"update\" parameterType=").append(pojoPath).append(" >\nupdate ")
+                .append(tableName).append( " set <trim  suffixOverrides=\",\" >");
         for (int i = 0; i < pojoName.size(); i++) {
             String column = pojoName.get(i);
             String name = nameChange(column,false);
@@ -105,18 +108,33 @@ public class FileCreate {
                 insert.append(column);
                 insertEnd.append("#{").append(name).append("}");
                 sql.append(",").append(column);
+                update.append("\n    <if test=\"").append(name).append(" != null  \">").append(column).append("=#{")
+                        .append(name).append("},</if>");
             }else {
                 insert.append(",").append(column);
                 insertEnd.append(",#{").append(name).append("}");
                 sql.append(",").append(column);
+                update.append("\n    <if test=\"").append(name).append(" != null  \">").append(column).append("=#{")
+                        .append(name).append("},</if>");
             }
-            sqlWhere.append("<if test=\"").append(name).append("!= null\">").append("and ").append(column).append("=#{")
+            sqlWhere.append("\n<if test=\"").append(name).append("!= null\">").append("and ").append(column).append("=#{")
                     .append(name).append("}</if>");
         }
+        update.append("</trim> where ").append(pojoName.get(0)).append("=#{").append(nameChange(pojoName.get(0),false))
+                .append("}\n</update>");
         sql.append("</sql>\n");
         sqlWhere.append("</trim></sql>");
-        insert.append(insertEnd).append(")</insert>");
-        code.append("\n</resultMap>").append(sql).append(sqlWhere).append(insert).append("\n</mapper>");
+        insert.append(insertEnd).append(")\n</insert>");
+        //删
+        String delete = "\n<delete id=\"deleteById\" parameterType=" + pojoPath + " >\ndelete " +
+                "from " + tableName + " where " + pojoName.get(0) + " = " +
+                "#{" + nameChange(pojoName.get(0), false) + "}\n</delete>";
+        //查
+        String select = "\n<select id=\"selectByModel\" resultMap=\"BaseResultMap\"  parameterType = "+pojoPath+">"+
+                "\n    select <include refid=\"Base_Column_List\"/> \n    from "+tableName +"\n    <include refid=\"Example_Where_Clause\"/> "+
+                "\n    order by " +pojoName.get(0)+" desc \n</select>\n<!--以上为自动生成的crud代码可根据具体需求自行修改-->\n";
+        code.append("\n</resultMap>").append(sql).append(sqlWhere).append(insert).append(update).append(delete)
+                .append(select).append("\n</mapper>");
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(mapperPage.getAbsolutePath()+"/"
                     +nameChange(tableName,false)+"Mapper.xml"));
@@ -177,8 +195,8 @@ public class FileCreate {
                 //在创建好的文件中写入"具体代码"
                 impl.write("package "+parentPage+"."+packageName+".impl;\n\nimport com.zhou.crud.BaseServiceImpl;\nimport "
                         + parentPage+"."+FileCreate.pojo+"."+nameChange(tableName,true)
-                        +";\nimport "+ parentPage+"."+packageName+"."+nameChange(tableName,true)+"Service;"+
-                        "\n\n" + getAuthor()+"\npublic class "+nameChange(tableName,true)
+                        +";\nimport org.springframework.stereotype.Service;\nimport "+ parentPage+"."+packageName+"."+nameChange(tableName,true)+"Service;"+
+                        "\n\n" + getAuthor()+"\n@Service\npublic class "+nameChange(tableName,true)
                         +"ServiceImpl extends BaseServiceImpl<"+nameChange(tableName,true)+"> implements "+nameChange(tableName,true)+"Service {\n\n}");
                 //一定要关闭文件
                 impl.close();
@@ -211,6 +229,7 @@ public class FileCreate {
         List<String> pojoName = Database.getColumnNames(database,tableName);
         List<String> pojoType = Database.getColumnTypes(database,tableName);
         List<String> pojoDesc = Database.getColumnComments(database,tableName);
+
         for (int i = 0; i < pojoName.size(); i++) {
             String name = nameChange(pojoName.get(i),false);
             String type = processTypeConvert(pojoType.get(i));
@@ -221,12 +240,11 @@ public class FileCreate {
             code.append("\n    ").append("/**").append(desc).append("*/").append("\n    ").append("private ")
                     .append(type).append(" ").append(name).append(";");
             //编写getter方法
-            getterSetter.append("\n    public ").append(type).append(" ").append("get").append(name.replaceFirst(
-                    name.substring(0,1),name.substring(0,1).toUpperCase())).append("() {")
+            String str = name.replaceFirst(name.substring(0, 1), name.substring(0, 1).toUpperCase());
+            getterSetter.append("\n    public ").append(type).append(" ").append("get").append(str).append("() {")
                     .append("\n        return ").append(name).append(";\n    }");
             //编写setter方法
-            getterSetter.append("\n    public void set").append(name.replaceFirst(
-                    name.substring(0,1),name.substring(0,1).toUpperCase()))
+            getterSetter.append("\n    public void set").append(str)
                     .append("(").append(type).append(" ").append(name).append(") {\n        this.").append(name)
                     .append(" = ").append(name).append(";\n    }");
         }
@@ -244,9 +262,8 @@ public class FileCreate {
                     +nameChange(tableName,true)+ ".java"));
             //在创建好的文件中写入"具体代码"
             bw.write("package "+parentPage+"."+packageName+";\n"+importJar.toString()+"\n" + getAuthor()+"\npublic class "+
-                    nameChange(tableName,true)+" implements Serializable {\n" +
-                    "" +code.toString()+
-                    "\n}");
+                    nameChange(tableName,true)+" implements Serializable {\n\n" +
+                    "    private static final long serialVersionUID = "+new Random().nextLong()+ "L\n" +code.toString()+"\n}");
             //一定要关闭文件
             bw.close();
         } catch (IOException e) {
@@ -258,7 +275,7 @@ public class FileCreate {
     /**
      * mysql字段类型转java类型
      * @param fieldType mysql字段类型
-     * @return
+     * @return 对应的java类型
      */
     public String processTypeConvert(String fieldType) {
         String t = fieldType.toLowerCase();
@@ -313,7 +330,7 @@ public class FileCreate {
      * @return str
      */
     public String getAuthor(){
-        return "\n\n/**\n * @author : Wenyu Zhou\n * @version : 1.0\n * "
+        return "\n\n/**\n * @author : zhouwenyu@tom.com\n * @version : 1.0\n * "
                 +new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\n */";
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class Database implements CrudApi {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Database.class);
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static String DRIVER = "com.mysql.jdbc.Driver";
     /** jdbc:mysql://192.168.1.211:3306/auvgo-test?useUnicode=true&characterEncoding=utf8 */
     private static String URL;
     /** root */
@@ -44,14 +44,31 @@ public class Database implements CrudApi {
         }
     }
 
+    @Override
+    public void setDrive(String drive) {
+        Database.DRIVER = drive;
+    }
 
+    @Override
+    public void setUrl(String url) {
+        Database.URL = url;
+    }
+
+    @Override
+    public void setUserAndPwd(String user, String pwd) {
+        Database.USERNAME = user;
+        Database.PASSWORD = pwd;
+    }
+
+    @Override
+    public void setParentPage(String parentPage) {
+        Database.parentPage = parentPage;
+    }
     /*-------------------------------------------数据库操作-----------------------------------------------------------*/
 
-    public Database(String url,String username, String password, String parentPage){
-        Database.URL = url;
+    public Database(String username, String password){
         Database.USERNAME = username;
         Database.PASSWORD = password;
-        Database.parentPage = parentPage;
     }
     static {
         try {

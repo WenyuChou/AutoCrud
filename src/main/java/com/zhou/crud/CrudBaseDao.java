@@ -12,12 +12,8 @@ import java.util.List;
 public interface CrudBaseDao<T> {
 
     int insert(T var1);
-
+    /**只修改传参部分*/
     int update(T var1);
-
-    List<T> selectPage(T var1);
-
-    Integer selectPageCount(T var1);
 
     List<T> selectByModel(T var1);
 

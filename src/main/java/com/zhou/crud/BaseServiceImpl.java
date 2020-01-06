@@ -26,14 +26,6 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     @Override
-    public PageInfo<T> selectPage(T model) {
-        PageInfo<T> pageInfo = new PageInfo<>();
-        pageInfo.setList(baseDao.selectPage(model));
-        pageInfo.setTotal(baseDao.selectPageCount(model));
-        return pageInfo;
-    }
-
-    @Override
     public List<T> selectByModel(T model) {
         return baseDao.selectByModel(model);
     }

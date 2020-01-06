@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class PageInfo<T> implements Serializable {
 
+    private static final long serialVersionUID = -5068681224447345474L;
     private boolean hasNext;
     private boolean hasPre;
     private List<T> list;

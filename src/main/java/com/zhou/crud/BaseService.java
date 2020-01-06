@@ -11,10 +11,8 @@ import java.util.List;
  */
 public interface BaseService<T> {
     Integer insert(T model);
-
+    /**只修改传参部分*/
     Integer update(T model);
-
-    PageInfo<T> selectPage(T model);
 
     List<T> selectByModel(T model);
 
