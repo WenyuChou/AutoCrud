@@ -4,19 +4,36 @@ import java.util.List;
 
 
 /**
- * @author : Wenyu Zhou
+ * @author : zhouwenyu@tom.com
  * @version : 1.0
- * @email : m13718591023@163.com
- * @date  : 2019-11-07 17:43:24
  */
 public interface CrudBaseDao<T> {
-
+    /**
+     * insert
+     * @param var1 var1
+     * @return return
+     */
     int insert(T var1);
-    /**只修改传参部分*/
+
+    /**
+     * update
+     * @param var1 var1
+     * @return return
+     */
     int update(T var1);
 
+    /**
+     * select
+     * @param var1 var1
+     * @return return
+     */
     List<T> selectByModel(T var1);
 
+    /**
+     * delete
+     * @param var1 var1
+     * @return return
+     */
     Integer deleteById(T var1);
 
 }

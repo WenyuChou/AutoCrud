@@ -12,10 +12,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author : zhouwenyu
+ * @author : zhouwenyu@tom.com
  * @version : 1.0
- * @Project : AutoCrud
- * @date : 2019/11/7 15:25
  */
 public class FileCreate {
 
@@ -150,7 +148,7 @@ public class FileCreate {
      * service层创建
      * @param parentPage 根地址
      * @param tableName 表名
-     * @return
+     * @return return
      */
     public boolean createService(String parentPage, String tableName){
         String packageName = FileCreate.service;
@@ -330,7 +328,7 @@ public class FileCreate {
      * @return str
      */
     public String getAuthor(){
-        return "\n\n/**\n * @author : zhouwenyu@tom.com\n * @version : 1.0\n * "
-                +new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\n */";
+        return "\n\n/**\n * @author : zhouwenyu@tom.com\n * @version : 1.0\n * @date : "
+                +new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\n*\n */";
     }
 }

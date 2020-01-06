@@ -5,11 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author : m13718591023@163.com zhouwenyu
+ * @author : zhouwenyu@tom.com
  * @version : 1.0
- * @Package : com.zhou.crud
- * @Project : AutoCrud
- * @date : 2019/11/22 16:33
  */
 public class PageInfo<T> implements Serializable {
 

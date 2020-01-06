@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author : zhouwenyu
+ * @author : zhouwenyu@tom.com
  * @version : 1.0
- * @date : 2019/11/7 15:04
  */
 public class Database implements CrudApi {
 
@@ -66,7 +65,14 @@ public class Database implements CrudApi {
     }
     /*-------------------------------------------数据库操作-----------------------------------------------------------*/
 
-    public Database(String username, String password){
+    /**
+     *
+     * @param url url
+     * @param username user
+     * @param password pwd
+     */
+    public Database(String url,String username, String password){
+        Database.URL = url;
         Database.USERNAME = username;
         Database.PASSWORD = password;
     }
@@ -80,7 +86,7 @@ public class Database implements CrudApi {
     /**
      * 获取数据库连接
      *
-     * @return
+     * @return conn
      */
     private static Connection getConnection() {
         Connection conn = null;
@@ -94,7 +100,7 @@ public class Database implements CrudApi {
 
     /**
      * 关闭数据库连接
-     * @param conn
+     * @param conn conn
      */
     private static void closeConnection(Connection conn) {
         if(conn != null) {
@@ -108,6 +114,8 @@ public class Database implements CrudApi {
 
     /**
      * 获取数据库下的所有表名
+     * @param database database
+     * @return return
      */
     public static List<String> getTableNames(String database) {
         List<String> tableNames = new ArrayList<>();
@@ -136,8 +144,9 @@ public class Database implements CrudApi {
 
     /**
      * 获取表中所有字段名称
-     * @param tableName 表名
-     * @return
+     * @param database database
+     * @param tableName table
+     * @return return
      */
     public static List<String> getColumnNames(String database, String tableName) {
         List<String> columnNames = new ArrayList<>();
@@ -171,8 +180,9 @@ public class Database implements CrudApi {
 
     /**
      * 获取表中所有字段类型
-     * @param tableName
-     * @return
+     * @param tableName table
+     * @param database database
+     * @return return
      */
     public static List<String> getColumnTypes(String database, String tableName) {
         List<String> columnTypes = new ArrayList<>();
@@ -206,8 +216,9 @@ public class Database implements CrudApi {
 
     /**
      * 获取表中字段的所有注释
-     * @param tableName
-     * @return
+     * @param tableName table
+     * @param database database
+     * @return return
      */
     public static List<String> getColumnComments(String database, String tableName) {
         List<String> columnTypes = new ArrayList<>();

@@ -1,10 +1,8 @@
 package com.zhou.crud;
 
 /**
- * @author : zhouwenyu
+ * @author : zhouwenyu@tom.com
  * @version : 1.0
- * @Project : AutoCrud
- * @date : 2019/11/7 16:09
  */
 public interface CrudApi {
     /**

@@ -4,11 +4,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author : zhouwenyu  email:m13718591023@163.com
+ * @author : zhouwenyu@tom.com
  * @version : 1.0
- * @Package : com.zhou.crud
- * @Project : AutoCrud
- * @date : 2019/11/22 17:01
  */
 public class BaseServiceImpl<T> implements BaseService<T> {
 
