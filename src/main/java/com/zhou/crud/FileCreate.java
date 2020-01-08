@@ -261,7 +261,7 @@ public class FileCreate {
             //在创建好的文件中写入"具体代码"
             bw.write("package "+parentPage+"."+packageName+";\n"+importJar.toString()+"\n" + getAuthor()+"\npublic class "+
                     nameChange(tableName,true)+" implements Serializable {\n\n" +
-                    "    private static final long serialVersionUID = "+new Random().nextLong()+ "L\n" +code.toString()+"\n}");
+                    "    private static final long serialVersionUID = "+new Random().nextLong()+ "L;\n" +code.toString()+"\n}");
             //一定要关闭文件
             bw.close();
         } catch (IOException e) {
