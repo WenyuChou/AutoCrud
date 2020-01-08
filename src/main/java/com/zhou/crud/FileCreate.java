@@ -329,6 +329,6 @@ public class FileCreate {
      */
     public String getAuthor(){
         return "\n\n/**\n * @author : zhouwenyu@tom.com\n * @version : 1.0\n * @date : "
-                +new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\n*\n */";
+                +new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\n *\n */";
     }
 }
