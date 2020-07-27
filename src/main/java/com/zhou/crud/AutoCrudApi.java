@@ -344,14 +344,15 @@ public class AutoCrudApi {
         for (int i = 0; i < columnNames.size(); i++) {
             String column = columnNames.get(i);
             String name = nameChange(column, false);
-            code.append("\n    <result column=\"").append(column).append("\" property=\"").append(name).append("\"/>");
             if (i == 0) {
                 //主键
+                code.append("\n    <id column=\"").append(column).append("\" property=\"").append(name).append("\"/>");
                 sql.append(column);
             } else {
+                code.append("\n    <result column=\"").append(column).append("\" property=\"").append(name).append("\"/>");
+                sql.append(",").append(column);
                 insert.append("\n        <if test=\"").append(name).append(" != null\" >\n          ").append(column).append(",\n        </if>");
                 insertEnd.append("\n        <if test=\"").append(name).append(" != null\"> \n          #{").append(name).append("},\n        </if>");
-                sql.append(",").append(column);
                 update.append("\n    <if test=\"").append(name).append(" != null\">").append(column).append("=#{")
                         .append(name).append("},</if>");
             }
