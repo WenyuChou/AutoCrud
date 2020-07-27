@@ -66,7 +66,7 @@ public class AutoCrudApi {
      * 数据库操作 (无需修改)
      */
     private static final String SQL = "SELECT * FROM ";
-    private final static Logger log = LoggerFactory.getLogger(AutoCrudApi.class);
+    private final static Logger log = LoggerFactory.getLogger("AutoCrudApi");
 
     /**----------------------------------------------API---------------------------------------------------------------*/
 
