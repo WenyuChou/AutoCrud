@@ -396,7 +396,7 @@ public class AutoCrudApi {
         //查单个对象
         String selectObject = "\n<select id=\"" + this.sqlSelectObject + "\" resultMap=\"BaseResultMap\"  parameterType = " + pojoPath + ">" +
                 "\n    select <include refid=\"Base_Column_List\"/> " +
-                "\n    from " + tableName + "" +
+                "\n    from " + tableName +
                 "\n    <include refid=\"Example_Where_Clause\"/> limit 1" +
                 "\n</select>\n<!--以上为自动生成的crud代码可根据具体需求自行修改-->\n";
         code.append("\n</resultMap>").append(sql).append(sqlWhere).append(insert).append(update).append(delete)
