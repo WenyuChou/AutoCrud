@@ -25,7 +25,7 @@ import java.util.Random;
  */
 public class AutoCrudApi {
     private final static Logger log = LoggerFactory.getLogger("AutoCrudApi");
-    /**<font color = #e33539>请使用下述main方法生成代码。</font>*/
+    /**<font color = #ee7c6b>请使用下述main方法生成代码。</font>*/
     public static void main(String[] args) {
         //for example:
         AutoCrudApi api = new AutoCrudApi();
