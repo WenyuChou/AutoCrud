@@ -297,7 +297,7 @@ public class AutoCrudApi {
                 //在创建好的文件中写入"具体代码"
                 bw.write("package " + parentPage + "." + packageName + ";\n" + importJar + "\n" + getAuthor() + "\n" +
                         "@Mapper\npublic interface " + createClassName + "Mapper{\n" +
-                        "    int " + this.sqlInsert + "(" + createClassName + " param);\n" +
+                        "    long " + this.sqlInsert + "(" + createClassName + " param);\n" +
                         "    int " + this.sqlDelete + "(Long " + nameChange(columnNames.get(0), false) + ");\n" +
                         "    int " + this.sqlUpdate + "(" + createClassName + " param);\n" +
                         "    List<" + createClassName + "> " + this.sqlSelectList + "(" + createClassName + " param);\n" +
