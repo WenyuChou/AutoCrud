@@ -19,18 +19,22 @@ import java.util.Random;
  * @author : wenyu.chou@outlook.com
  * @version : 1.0
  * @see #getAuthor() <font color = yellow>在此填入你的信息 crtl + 鼠标左键进入</font><br>
- * @see #createPojo(String, String, String,String)  model实体类创建源码
- * @see #createDao(String, String, String,String) mapper创建源码
+ * @see #createPojo(String, String, String, String)  model实体类创建源码
+ * @see #createDao(String, String, String, String) mapper创建源码
  * </br>
  */
 public class AutoCrudApi {
     private final static Logger log = LoggerFactory.getLogger("AutoCrudApi");
-    /**<font color = #ee7c6b>请使用下述main方法生成代码。</font>*/
+
+    /**
+     * <font color = #ee7c6b>请使用下述main方法生成代码。</font>
+     */
     public static void main(String[] args) {
         //for example:
         AutoCrudApi api = new AutoCrudApi();
-        api.createJavaCode("duojia_4test","s_split_bill","SplitBill");
+        api.createJavaCode("duojia_4test", "s_split_bill", "SplitBill");
     }
+
     final static String DRIVER = "com.mysql.jdbc.Driver";
 
     /**
@@ -69,12 +73,15 @@ public class AutoCrudApi {
      */
     private static final String SQL = "SELECT * FROM ";
 
-    /**----------------------------------------------API---------------------------------------------------------------*/
+    /**
+     * ----------------------------------------------API---------------------------------------------------------------
+     */
 
     public void createJavaCode(String database, String tableName) {
-        this.createJavaCode(database,tableName,null);
+        this.createJavaCode(database, tableName, null);
     }
-    public void createJavaCode(String database, String tableName,String createFileName) {
+
+    public void createJavaCode(String database, String tableName, String createFileName) {
         if (createPojo(this.parentPage, database, tableName, createFileName)) {
             log.info(pojo + " 创建成功");
         }
@@ -272,7 +279,7 @@ public class AutoCrudApi {
      * @param tableName  数据表名称
      * @return 操作是否成功
      */
-    public boolean createDao(String parentPage, String database, String tableName,String createName) {
+    public boolean createDao(String parentPage, String database, String tableName, String createName) {
         String packageName = this.dao;
         File file = new File(System.getProperty("user.dir") + "/src/main/java/" +
                 parentPage.replace(".", "/") + "/" + packageName);
@@ -421,7 +428,7 @@ public class AutoCrudApi {
      * @param tableName  数据表名称
      * @return 操作是否成功
      */
-    public boolean createPojo(String parentPage, String database, String tableName,String createName) {
+    public boolean createPojo(String parentPage, String database, String tableName, String createName) {
         String packageName = this.pojo;
         File file = new File(System.getProperty("user.dir") + "/src/main/java/" +
                 parentPage.replace(".", "/") + "/" + packageName);
@@ -445,7 +452,7 @@ public class AutoCrudApi {
             if ("Date".equals(type) && !importJar.toString().contains("java.util.Date")) {
                 importJar.append("\nimport java.util.Date;");
             }
-            if("BigDecimal".equals(type) && !importJar.toString().contains("java.math.BigDecimal")){
+            if ("BigDecimal".equals(type) && !importJar.toString().contains("java.math.BigDecimal")) {
                 importJar.append("\nimport java.math.BigDecimal;");
             }
             code.append("\n    ").append("/**").append(desc).append("*/").append("\n    ").append("private ")
@@ -543,8 +550,9 @@ public class AutoCrudApi {
 
     /**
      * 获取签名
-     * @see #log <font color = yellow>返回顶部（ctrl+左键）</font>
+     *
      * @return str
+     * @see #log <font color = yellow>返回顶部（ctrl+左键）</font>
      */
     public String getAuthor() {
         return "\n\n/**\n * @author wenyu.chou@outlook.com\n * @version 1.0\n * @date "
